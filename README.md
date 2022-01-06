@@ -1,11 +1,15 @@
 # RememberThat-App
 
 
-This is a task app made in React-Native.
+This is a task app made in React-Native. (not finished yet)
 
 # App Demo
 
 
 
-https://user-images.githubusercontent.com/74794713/145742044-c42783a4-ead2-4670-af3b-be638070c05e.mp4
+
+
+https://user-images.githubusercontent.com/74794713/148408879-bddef1ee-f7d5-4dad-81ce-7fd1a5d50a67.mp4
+
+
 

@@ -1,18 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import TaskItem from './components/TaskItem';
 import TaskInput from './components/TaskInput';
 import Logo from './components/Logo';
+import RoundedButton from './components/RoundedButton';
 
-
+const { width, height } = Dimensions.get('screen');
 export default function App() {
   const [tasks, setTasks] = useState([]);
   const [taskID, setTaskID] = useState(1);
   const [showModal, setShowModal] = useState(false);
 
-  const manageAddBtn = (taskToAdd) => {
-    setTasks(renewTaskList => [...renewTaskList, { id: taskID, value: taskToAdd }]);
+
+
+  const manageAddBtn = (taskToAdd, taskDescription, date) => {
+    setTasks(renewTaskList => [...renewTaskList, { id: taskID, value: taskToAdd, description: taskDescription, time: date }]);
     setTaskID(taskID + 1);
     setShowModal(false);
   };
@@ -22,8 +25,6 @@ export default function App() {
       return currentTasks.filter((task) => task.id !== taskId);
     });
   };
-
-
 
   const clearAllTasks = () => {
     setTasks([]);
@@ -39,18 +40,25 @@ export default function App() {
       <View style={styles.header}>
         <Logo />
         <View style={styles.addBtn}>
-          <Button title='Clear' onPress={clearAllTasks} />
+          <RoundedButton title='Clear' style={styles.cancelBtn} onPress={() => clearAllTasks()} />
         </View>
       </View>
-      <TaskInput visible={showModal} onAndPress={manageAddBtn} onCancel={onCancelBtnHandler} />
+      <TaskInput visible={showModal}
+        onAndPress={manageAddBtn}
+        onCancel={onCancelBtnHandler} />
       <FlatList keyExtractor={(item, index) => item.id}
         data={tasks}
         renderItem={itemData => (
-          <TaskItem id={itemData.item.id} item={itemData.item.value} onDeleteItem={() => deleteItem(itemData.item.id)} />
+          <TaskItem description={itemData.item.description}
+            id={itemData.item.id}
+            item={itemData.item.value}
+            date={itemData.item.time}
+            onDeleteItem={() => deleteItem(itemData.item.id)}
+          />
         )
         } />
       <View style={styles.closeAllBtn}>
-        <Button title='Add new Task' onPress={showAddTaskModal} />
+        <RoundedButton title='Add new Task' onPress={() => showAddTaskModal()} style={styles.addTaskBtn} />
       </View>
     </View >
   );
@@ -68,6 +76,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignContent: 'center',
   },
+  addTaskBtn: {
+    width: width * 0.8,
+    height: height * 0.06,
+    backgroundColor: 'blue'
+  },
+  cancelBtn: {
+    borderColor: 'red',
+    backgroundColor: 'red',
+    height: height * 0.05,
+    width: height * 0.12,
+  },
   addBtn: {
     marginTop: 10,
     marginRight: 10,
@@ -78,7 +97,13 @@ const styles = StyleSheet.create({
     height: '100%',
 
   },
-  closeAllBtn: {},
+  closeAllBtn: {
+    //backgroundColor: 'black',
+    alignItems: 'center',
+    width: '100%',
+    padding: width * 0.01,
+
+  },
 
 
 });
